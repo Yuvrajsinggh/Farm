@@ -1,13 +1,12 @@
-import { View, Text, Button } from 'react-native';
+import { View, Image } from 'react-native';
 import React from 'react';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text className="text-3xl text-black ">Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.push('Details')}
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#447055' }}>
+
+      <Image
+        source={require('../assets/Farm.png')}
       />
     </View>
   );
