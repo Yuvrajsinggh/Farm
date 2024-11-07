@@ -2,5 +2,18 @@
   "welcome": "स्वागत है",
   "selectLanguage": "अपनी भाषा चुनें",
   "registerScreen": "रजिस्टर स्क्रीन",
-  "alreadyRegistered": "पहले से पंजीकृत"
+  "alreadyRegistered": "पहले से पंजीकृत",
+  "email": "ईमेल",
+  "password": "पासवर्ड",
+  "login": "लॉगिन",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "notRegistered": "पंजीकृत नहीं है? साइन अप करें",
+  "name": "नाम",
+  "phone": "फ़ोन",
+  "emailOptional": "ईमेल (वैकल्पिक)",
+  "createAccount": "खाता बनाएं",
+  "alreadyHaveAccount": "पहले से ही एक खाता है? लॉगिन करें",
+  "required": "यह फ़ील्ड आवश्यक है",
+  "invalidPhone": "अमान्य फोन नंबर",
+  "register": "रजिस्टर करें"
 }

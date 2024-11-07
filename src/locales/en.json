@@ -2,5 +2,17 @@
   "welcome": "Welcome",
   "selectLanguage": "Select your language",
   "registerScreen": "Register Screen",
-  "alreadyRegistered": "Already Registered"
+  "alreadyRegistered": "Already Registered",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "forgotPassword": "Forgot Password?",
+  "notRegistered": "Not Registered? Sign Up",
+  "alreadyHaveAccount": "Already have an account? Login",
+  "emailOptional": "Email (Optional)",
+  "name": "Name",
+  "phone": "Phone",
+  "required": "This field is required",
+  "invalidPhone": "Invalid phone number",
+  "register": "Register"
 }
