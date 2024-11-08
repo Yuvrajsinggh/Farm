@@ -21,6 +21,7 @@ const StackNavigator = () => {
         }, 2500); // Adjust the delay as needed
         return () => clearTimeout(timer);
     }, []);
+    console.log(isAuthenticated);
 
     return (
         <NavigationContainer>
@@ -32,7 +33,7 @@ const StackNavigator = () => {
                 ) : isAuthenticated ? (
                     <Stack.Screen name="MainApp" component={TabNavigation} />
                 ) : (
-                    <Stack.Screen name="AuthNavigation" component={AuthNavigation} />
+                    <Stack.Screen name="AuthStack" component={AuthNavigation} /> // Render AuthNavigation here
                 )}
             </Stack.Navigator>
         </NavigationContainer>

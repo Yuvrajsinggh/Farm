@@ -14,5 +14,9 @@
   "phone": "Phone",
   "required": "This field is required",
   "invalidPhone": "Invalid phone number",
-  "register": "Register"
+  "register": "Register",
+  "invalidEmail": "Please enter a valid email address",
+  "enterEmail": "Enter your email",
+  "resetPassword": "Reset Password",
+  "backToLogin": "Back to Login"
 }

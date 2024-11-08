@@ -7,14 +7,15 @@ import { AuthContext } from '../../context/Authcontext';
 import { LanguageContext } from '../../context/LanguageContext';
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
 export default function ProfileManagement() {
     const navigation = useNavigation();
     const { signOut } = useContext(AuthContext);
     const { changeLanguage } = useContext(LanguageContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { t } = useTranslation();
-
+    const { logout } = React.useContext(AuthContext);
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             displayName: '',
@@ -39,22 +40,14 @@ export default function ProfileManagement() {
         }
     };
 
-    const handleSignOut = async () => {
-        try {
-            await signOut();
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'AuthNavigation' }],
-            });
-        } catch (error) {
-            console.error('Error signing out:', error);
-        }
+    const handleSignOut = () => {
+        logout();
     };
 
     return (
         <View className="flex-1 bg-[#9EA199] p-4">
             <Text className="text-2xl font-bold mb-6">{t('Profile Management')}</Text>
-
+            {/* <FontAwesomeIcon icon={faMugSaucer} /> */}
             <Controller
                 control={control}
                 rules={{ required: t('Display name is required') }}

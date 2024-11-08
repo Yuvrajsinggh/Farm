@@ -15,5 +15,9 @@
   "alreadyHaveAccount": "पहले से ही एक खाता है? लॉगिन करें",
   "required": "यह फ़ील्ड आवश्यक है",
   "invalidPhone": "अमान्य फोन नंबर",
-  "register": "रजिस्टर करें"
+  "register": "रजिस्टर करें",
+  "invalidEmail": "कृपया एक मान्य ईमेल पता दर्ज करें",
+  "enterEmail": "अपना ईमेल दर्ज करें",
+  "resetPassword": "पासवर्ड रीसेट करें",
+  "backToLogin": "लॉगिन पर वापस जाएं"
 }

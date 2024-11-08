@@ -7,7 +7,7 @@ const Home = ({ navigation }) => {
   const { farms } = useFarms();
 
   return (
-    <ScrollView className="flex-1 bg-gray-100">
+    <ScrollView className="flex-1 bg-[#447055]">
       {/* Weather Card */}
       <View className="p-2 bg-white m-2 rounded-lg">
         <Text className="text-lg font-bold text-black">Weather</Text>

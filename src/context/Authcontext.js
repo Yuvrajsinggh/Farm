@@ -10,10 +10,10 @@ export const AuthProvider = ({ children }) => {
 
     // Hardcoded login function
     const login = (username, password) => {
-        if (token) {
-            setIsAuthenticated(true);
-            setUser({ username: 'user', name: 'John Doe' });
-        }
+
+        setIsAuthenticated(true);
+        setUser({ username: 'user', name: 'John Doe' });
+
     };
 
     // Hardcoded logout function
