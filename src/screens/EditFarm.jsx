@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useFarms } from '../context/FarmContext';
 
 const EditFarm = ({ navigation, route }) => {
@@ -55,62 +56,148 @@ const EditFarm = ({ navigation, route }) => {
   };
 
   return (
-    <View className="flex-1 bg-gray-100 p-4">
-      <View className="bg-white rounded-lg p-4">
-        <Text className="text-black mb-2">Farm Name</Text>
-        <TextInput
-          className="border border-gray-300 rounded-md p-2 mb-4 text-black"
-          value={farmName}
-          onChangeText={setFarmName}
-        />
-
-        <Text className="text-black mb-2">Location</Text>
-        <TextInput
-          className="border border-gray-300 rounded-md p-2 mb-4 text-black"
-          value={location}
-          onChangeText={setLocation}
-        />
-
-        <Text className="text-black mb-2">Crop</Text>
-        <TextInput
-          className="border border-gray-300 rounded-md p-2 mb-4 text-black"
-          value={crop}
-          onChangeText={setCrop}
-        />
-
-        <Text className="text-black mb-2">Soil Type</Text>
-        <TextInput
-          className="border border-gray-300 rounded-md p-2 mb-4 text-black"
-          value={soil}
-          onChangeText={setSoil}
-        />
-
-        <TouchableOpacity
-          className="bg-blue-500 rounded-md p-3 mb-3"
-          onPress={handleSave}
-        >
-          <Text className="text-white text-center font-bold">
-            {farmId ? 'Save Changes' : 'Add Farm'}
-          </Text>
-        </TouchableOpacity>
-
-        {farmId && (
+    <ScrollView className="flex-1 bg-[#447055]">
+      {/* Header Section */}
+      <View className="p-6 pb-8">
+        <View className="flex-row justify-between items-center mb-6">
           <TouchableOpacity
-            className="bg-red-500 rounded-md p-3 mb-3"
-            onPress={handleDelete}
+            onPress={() => navigation.goBack()}
+            className="bg-white/20 p-2 rounded-full"
           >
-            <Text className="text-white text-center font-bold">Delete Farm</Text>
+            <Icon name="arrow-back-outline" size={24} color="white" />
           </TouchableOpacity>
-        )}
+          <Text className="text-white text-xl font-bold">
+            {farmId ? '🌾 Edit Farm' : '🌱 New Farm'}
+          </Text>
+          <TouchableOpacity
+            onPress={handleNewFarm}
+            className="bg-white/20 p-2 rounded-full"
+          >
+            <Icon name="refresh-outline" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          className="bg-green-500 rounded-md p-3"
-          onPress={handleNewFarm}
-        >
-          <Text className="text-white text-center font-bold">Clear Form</Text>
-        </TouchableOpacity>
+        {/* Farm Icon */}
+        <View className="items-center mb-6">
+          <View className="bg-white/20 p-4 rounded-full">
+            <Icon name="leaf-outline" size={40} color="white" />
+          </View>
+        </View>
       </View>
-    </View>
+
+      {/* Form Section */}
+      <View className="bg-white rounded-t-3xl flex-1 px-6 pt-6">
+        <View className="space-y-4">
+          {/* Farm Name Input */}
+          <View>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">Farm Name </Text>
+            <View className="relative">
+              <View className="absolute left-3 top-3 z-10">
+                <Icon name="business-outline" size={24} color="#447055" />
+              </View>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
+                value={farmName}
+                onChangeText={setFarmName}
+                placeholder="Enter farm name"
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
+          </View>
+
+          {/* Location Input */}
+          <View>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">Location </Text>
+            <View className="relative">
+              <View className="absolute left-3 top-3 z-10">
+                <Icon name="location-outline" size={24} color="#447055" />
+              </View>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
+                value={location}
+                onChangeText={setLocation}
+                placeholder="Enter location"
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
+          </View>
+
+          {/* Crop Input */}
+          <View>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">Crop Type </Text>
+            <View className="relative">
+              <View className="absolute left-3 top-3 z-10">
+                <Icon name="leaf-outline" size={24} color="#447055" />
+              </View>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
+                value={crop}
+                onChangeText={setCrop}
+                placeholder="Enter crop type"
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
+          </View>
+
+          {/* Soil Type Input */}
+          <View>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">Soil Type </Text>
+            <View className="relative">
+              <View className="absolute left-3 top-3 z-10">
+                <Icon name="earth-outline" size={24} color="#447055" />
+              </View>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
+                value={soil}
+                onChangeText={setSoil}
+                placeholder="Enter soil type"
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View className="space-y-3 mt-6">
+            <TouchableOpacity
+              className="bg-[#447055] rounded-xl p-4 flex-row justify-center items-center"
+              onPress={handleSave}
+            >
+              <Icon name="save-outline" size={24} color="white" />
+              <Text className="text-white font-bold text-lg ml-2">
+                {farmId ? 'Save Changes ' : 'Add Farm '}
+              </Text>
+            </TouchableOpacity>
+
+            {farmId && (
+              <TouchableOpacity
+                className="bg-red-500/90 rounded-xl p-4 flex-row justify-center items-center"
+                onPress={handleDelete}
+              >
+                <Icon name="trash-outline" size={24} color="white" />
+                <Text className="text-white font-bold text-lg ml-2">
+                  Delete Farm
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Quick Tips */}
+          <View className="mt-6 bg-blue-50 p-4 rounded-xl">
+            <View className="flex-row items-center mb-2">
+              <Icon name="information-circle-outline" size={24} color="#447055" />
+              <Text className="text-[#447055] font-bold text-lg ml-2">Quick Tips 💡</Text>
+            </View>
+            <Text className="text-gray-600">
+              • Add detailed location for better tracking{'\n'}
+              • Specify crop type for customized recommendations{'\n'}
+              • Include soil type for optimal irrigation settings
+            </Text>
+          </View>
+        </View>
+
+        <View className="h-6" />
+      </View>
+    </ScrollView>
   );
 };
 

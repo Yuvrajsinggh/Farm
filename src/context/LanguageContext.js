@@ -26,6 +26,8 @@ export const LanguageProvider = ({ children }) => {
         i18n.changeLanguage(language);
         await AsyncStorage.setItem('language', language);
         setIsLanguageSelected(true);
+        console.log('Language changed to:', language);
+
     };
 
     return (

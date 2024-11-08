@@ -40,22 +40,22 @@ const CropRecommendation = () => {
 
   const cropData = [
     {
-      title: t('Primary Recommendation'),
+      title: t('primaryRecommendation'),
       crops: [
-        { name: 'Wheat', season: 'Winter', icon: 'nutrition-outline' },
-        { name: 'Rice', season: 'Monsoon', icon: 'leaf-outline' },
-        { name: 'Corn', season: 'Summer', icon: 'flower-outline' },
+        { name: t('wheat'), season: t('winter'), icon: 'nutrition-outline' },
+        { name: t('rice'), season: t('monsoon'), icon: 'leaf-outline' },
+        { name: t('corn'), season: t('summer'), icon: 'flower-outline' },
       ],
-      reason: 'Based on soil conditions and climate patterns, these crops are ideal for maximum yield.',
+      reason: t('primaryReason'),
     },
     {
-      title: t('Alternative Options'),
+      title: t('alternativeOptions'),
       crops: [
-        { name: 'Barley', season: 'Winter', icon: 'nutrition-outline' },
-        { name: 'Soybean', season: 'Spring', icon: 'leaf-outline' },
-        { name: 'Millet', season: 'Summer', icon: 'flower-outline' },
+        { name: t('barley'), season: t('winter'), icon: 'nutrition-outline' },
+        { name: t('soybean'), season: t('spring'), icon: 'leaf-outline' },
+        { name: t('millet'), season: t('summer'), icon: 'flower-outline' },
       ],
-      reason: 'These alternatives are well-suited for crop rotation and soil health maintenance.',
+      reason: t('alternativeReason'),
     },
   ];
 
@@ -64,25 +64,25 @@ const CropRecommendation = () => {
       {/* Header Section */}
       <View className="bg-[#447055] p-4 pb-8 rounded-b-3xl">
         <Text className="text-white text-xl font-bold mb-4">
-          {t('Soil Conditions')}
+          {t('soilConditions')}
         </Text>
 
         {/* Condition Values Grid */}
         <View className="gap-3">
           <ConditionCard
-            label="Temperature"
+            label={t('temperature')}
             value={`${soilConditions.temp}°C`}
             bgColor="bg-orange-100"
             iconColor="#ea580c"
           />
           <ConditionCard
-            label="Humidity"
+            label={t('humidity')}
             value={`${soilConditions.humidity}%`}
             bgColor="bg-blue-100"
             iconColor="#1d4ed8"
           />
           <ConditionCard
-            label="Soil pH"
+            label={t('soilPH')}
             value={soilConditions.ph}
             bgColor="bg-purple-100"
             iconColor="#7e22ce"
@@ -95,7 +95,7 @@ const CropRecommendation = () => {
         {/* Soil Image Section */}
         <View className="bg-white p-4 rounded-lg mb-4">
           <Text className="text-black font-bold mb-3">
-            {t('Soil Analysis')}
+            {t('soilAnalysis')}
           </Text>
           <View className="h-48 bg-gray-100 rounded-lg overflow-hidden">
             <Image
@@ -111,7 +111,7 @@ const CropRecommendation = () => {
 
         {/* Recommendations Section */}
         <Text className="text-black font-bold text-lg mb-3">
-          {t('Recommended Crops')}
+          {t('recommendedCrops')}
         </Text>
 
         {cropData.map((row, index) => (

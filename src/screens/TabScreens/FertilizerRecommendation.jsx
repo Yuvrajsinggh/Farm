@@ -39,7 +39,7 @@ const FertilizerRecommendation = () => {
 
   const fertilizerData = [
     {
-      title: t('First Application'),
+      title: t('firstApplication'),
       fertilizers: [
         { name: 'DAP', amount: '50kg', icon: 'leaf-outline' },
         { name: 'MOP', amount: '67kg', icon: 'water-outline' },
@@ -47,7 +47,7 @@ const FertilizerRecommendation = () => {
       ],
     },
     {
-      title: t('Second Application'),
+      title: t('secondApplication'),
       fertilizers: [
         { name: 'DAP', amount: '70kg', icon: 'leaf-outline' },
         { name: 'MOP', amount: '45kg', icon: 'water-outline' },
@@ -61,25 +61,25 @@ const FertilizerRecommendation = () => {
       {/* Header Section */}
       <View className="bg-[#447055] p-4 pb-8 rounded-b-3xl">
         <Text className="text-white text-xl font-bold mb-4">
-          {t('NPK Values')}
+          {t('npkValues')}
         </Text>
 
         {/* NPK Values Grid */}
         <View className="gap-3">
           <NPKCard
-            label="Nitrogen (N)"
+            label={t('nitrogen')}
             value={`${npkValues.n}%`}
             bgColor="bg-green-100"
             iconColor="#15803d"
           />
           <NPKCard
-            label="Phosphorus (P)"
+            label={t('phosphorus')}
             value={`${npkValues.p}%`}
             bgColor="bg-blue-100"
             iconColor="#1d4ed8"
           />
           <NPKCard
-            label="Potassium (K)"
+            label={t('potassium')}
             value={`${npkValues.k}%`}
             bgColor="bg-yellow-100"
             iconColor="#ca8a04"
@@ -92,7 +92,7 @@ const FertilizerRecommendation = () => {
         {/* Crop Image Section */}
         <View className="bg-white p-4 rounded-lg mb-4">
           <Text className="text-black font-bold mb-3">
-            {t('Crop Image')}
+            {t('cropImage')}
           </Text>
           <View className="h-48 bg-gray-100 rounded-lg overflow-hidden">
             <Image
@@ -108,7 +108,7 @@ const FertilizerRecommendation = () => {
 
         {/* Recommendations Section */}
         <Text className="text-black font-bold text-lg mb-3">
-          {t('Recommended Fertilizers')}
+          {t('recommendedFertilizers')}
         </Text>
 
         {fertilizerData.map((row, index) => (
