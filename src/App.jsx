@@ -2,16 +2,19 @@ import React from 'react';
 import StackNavigator from './navigation/Navigation';
 import { AuthProvider } from './context/Authcontext';
 import { LanguageProvider } from './context/LanguageContext';
+import { FarmProvider } from './context/FarmContext';
 const App = () => {
   return (
     <AuthProvider>
-      <LanguageProvider>
+      <FarmProvider>
+        <LanguageProvider>
 
-        <StackNavigator />
-      </LanguageProvider>
+          <StackNavigator />
+        </LanguageProvider>
+      </FarmProvider>
     </AuthProvider>
 
-  )
+  );
 };
 
 export default App;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Image, Animated } from 'react-native';
+import { View, Animated } from 'react-native';
 
 const SplashScreen = ({ navigation, route }) => {
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -15,10 +15,10 @@ const SplashScreen = ({ navigation, route }) => {
             const destination = route?.params?.isAuthenticated ? 'MainApp' : 'AuthNavigation';
             navigation.navigate(destination);
         });
-    }, [navigation, route]);
+    }, [navigation, route, scaleValue]);
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#447055' }}>
+        <View className="flex-1 items-center justify-center bg-[#447055]">
             <Animated.Image
                 source={require('../assets/Farm.png')}
                 style={{ transform: [{ scale: scaleValue }] }}

@@ -1,9 +1,9 @@
-import { View, Text, Button, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import React from 'react';
 
 const Details = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#447055' }}>
+    <View className="flex-1 items-center justify-center bg-[#447055]">
       <Image
         source={require('../assets/Farm.png')}
       />

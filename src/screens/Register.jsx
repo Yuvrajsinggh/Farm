@@ -15,8 +15,8 @@ const RegisterScreen = ({ navigation }) => {
         defaultValues: {
             name: '',
             phone: '',
-            email: ''
-        }
+            email: '',
+        },
     });
 
     const onSubmit = (data) => {
@@ -62,8 +62,8 @@ const RegisterScreen = ({ navigation }) => {
                             required: t('required'),
                             pattern: {
                                 value: /^[0-9]{10}$/,
-                                message: t('invalidPhone')
-                            }
+                                message: t('invalidPhone'),
+                            },
                         }}
                         render={({ field: { onChange, value } }) => (
                             <StyledView>
@@ -89,8 +89,8 @@ const RegisterScreen = ({ navigation }) => {
                         rules={{
                             pattern: {
                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: 'Invalid email address'
-                            }
+                                message: 'Invalid email address',
+                            },
                         }}
                         render={({ field: { onChange, value } }) => (
                             <StyledView>

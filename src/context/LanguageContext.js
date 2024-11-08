@@ -20,6 +20,7 @@ export const LanguageProvider = ({ children }) => {
         loadLanguage();
     }, []);
 
+    // eslint-disable-next-line no-shadow
     const changeLanguage = async (language) => {
         setLanguage(language);
         i18n.changeLanguage(language);

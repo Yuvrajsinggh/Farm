@@ -14,8 +14,8 @@ const LanguageSelection = () => {
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>{t('selectLanguage')}</Text>
+        <View className="flex-1 justify-evenly items-center ">
+            <Text className="text-black text-xl font-bold">{t('selectLanguage')}</Text>
             <Button title="English" onPress={() => setLanguage('en')} />
             <Button title="हिंदी" onPress={() => setLanguage('hi')} />
         </View>
