@@ -40,33 +40,30 @@ const Login = ({ navigation }) => {
             <StyledView className="w-full space-y-4 bg-white/10 p-6 rounded-xl backdrop-blur-lg">
                 <Controller
                     control={control}
-                    name="email"
+                    name="phone"
                     rules={{
-                        required: 'Email is required',
+                        required: t('required'),
                         pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: 'Invalid email address',
+                            value: /^[0-9]{10}$/,
+                            message: t('invalidPhone'),
                         },
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <StyledView className="relative">
+                    render={({ field: { onChange, value } }) => (
+                        <StyledView className="relative mt-4">
                             <StyledView className="absolute left-3 top-4 z-10">
-                                <Icon name="mail-outline" size={24} color="#ffffff" />
+                                <Icon name="call-outline" size={24} color="#ffffff" />
                             </StyledView>
                             <StyledTextInput
                                 className="bg-white/20 rounded-xl p-4 pl-12 text-white text-lg"
-                                placeholder={t('email')}
+                                placeholder={t('phoneNumber')}
                                 placeholderTextColor="#ffffff80"
-                                keyboardType="email-address"
-                                autoCorrect={false}
-                                autoCapitalize="none"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
+                                keyboardType="phone-pad"
                                 value={value}
+                                onChangeText={onChange}
                             />
-                            {errors.email && (
+                            {errors.phone && (
                                 <StyledText className="text-red-400 text-sm ml-1 mt-1">
-                                    {errors.email.message}
+                                    {errors.phone.message}
                                 </StyledText>
                             )}
                         </StyledView>

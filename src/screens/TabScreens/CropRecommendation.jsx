@@ -1,32 +1,49 @@
 import React, { useMemo } from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { styled } from 'nativewind';
 import { useTranslation } from 'react-i18next';
 
-const ConditionCard = ({ label, value, bgColor, iconColor }) => (
-  <View className={`${bgColor} p-2 m-2 ml-4 rounded-lg flex-row items-center`}>
-    <View className="flex-1">
-      <Text className="text-gray-600 text-sm">{label}</Text>
-      <Text className="text-black text-xl font-bold">{value}</Text>
-    </View>
-    <Ionicons name="thermometer-outline" size={24} color={iconColor} />
-  </View>
+const StyledView = styled(View);
+const StyledText = styled(Text);
+const StyledScrollView = styled(ScrollView);
+
+const ConditionCard = ({ label, value, icon }) => (
+  <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg mb-3">
+    <StyledView className="flex-row justify-between items-center">
+      <StyledView className="flex-1">
+        <StyledText className="text-white/70 text-sm mb-1">{label}</StyledText>
+        <StyledText className="text-white text-xl font-bold">{value}</StyledText>
+      </StyledView>
+      <StyledView className="bg-white/20 p-2 rounded-full">
+        <Icon name={icon} size={24} color="#ffffff" />
+      </StyledView>
+    </StyledView>
+  </StyledView>
 );
 
-const CropRow = ({ data }) => (
-  <View className="bg-white rounded-lg p-4 mb-4">
-    <Text className="text-black font-bold mb-3">{data.title}</Text>
-    <View className="flex-row justify-around">
-      {data.crops.map((crop, index) => (
-        <View key={index} className="items-center bg-gray-50 p-3 rounded-lg flex-1 mx-1">
-          <Ionicons name={crop.icon} size={24} color="#447055" />
-          <Text className="text-black font-medium mt-2">{crop.name}</Text>
-          <Text className="text-gray-600 text-sm">{crop.season}</Text>
-        </View>
+const CropCard = ({ name, season, icon }) => (
+  <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg flex-1 mx-1">
+    <StyledView className="items-center">
+      <StyledView className="bg-white/20 p-3 rounded-full mb-2">
+        <Icon name={icon} size={24} color="#ffffff" />
+      </StyledView>
+      <StyledText className="text-white font-bold text-base">{name}</StyledText>
+      <StyledText className="text-white/70 text-sm mt-1">{season}</StyledText>
+    </StyledView>
+  </StyledView>
+);
+
+const RecommendationSection = ({ title, crops, reason }) => (
+  <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg mb-4">
+    <StyledText className="text-white font-bold text-lg mb-4">{title}</StyledText>
+    <StyledView className="flex-row justify-between mb-3">
+      {crops.map((crop, index) => (
+        <CropCard key={index} {...crop} />
       ))}
-    </View>
-    <Text className="text-gray-600 mt-3 text-sm">{data.reason}</Text>
-  </View>
+    </StyledView>
+    <StyledText className="text-white/70 text-sm">{reason}</StyledText>
+  </StyledView>
 );
 
 const CropRecommendation = () => {
@@ -36,6 +53,12 @@ const CropRecommendation = () => {
     temp: Math.floor(Math.random() * 41),
     humidity: Math.floor(Math.random() * 101),
     ph: (Math.random() * (8 - 5) + 5).toFixed(1),
+  }), []);
+
+  const npkValues = useMemo(() => ({
+    n: Math.floor(Math.random() * 101),
+    p: Math.floor(Math.random() * 101),
+    k: Math.floor(Math.random() * 101),
   }), []);
 
   const cropData = [
@@ -60,65 +83,91 @@ const CropRecommendation = () => {
   ];
 
   return (
-    <ScrollView className="flex-1 bg-gray-100">
+    <StyledScrollView className="flex-1 bg-[#447055]">
       {/* Header Section */}
-      <View className="bg-[#447055] p-4 pb-8 rounded-b-3xl">
-        <Text className="text-white text-xl font-bold mb-4">
-          {t('soilConditions')}
-        </Text>
+      <StyledView className="p-6">
+        <StyledView className="items-center mb-8">
+          <Icon name="leaf-outline" size={80} color="#ffffff" />
+          <StyledText className="text-4xl font-bold text-white text-center mt-4">
+            {t('soilAnalysis')}
+          </StyledText>
+          <StyledText className="text-white text-lg opacity-80 mt-2">
+            {t('analyzeAndRecommend')}
+          </StyledText>
+        </StyledView>
 
-        {/* Condition Values Grid */}
-        <View className="gap-3">
+        {/* Soil Conditions */}
+        <StyledView className="mb-6">
+          <StyledText className="text-white text-xl font-bold mb-4">
+            {t('soilConditions')}
+          </StyledText>
           <ConditionCard
             label={t('temperature')}
             value={`${soilConditions.temp}°C`}
-            bgColor="bg-orange-100"
-            iconColor="#ea580c"
+            icon="thermometer-outline"
           />
           <ConditionCard
             label={t('humidity')}
             value={`${soilConditions.humidity}%`}
-            bgColor="bg-blue-100"
-            iconColor="#1d4ed8"
+            icon="water-outline"
           />
           <ConditionCard
             label={t('soilPH')}
             value={soilConditions.ph}
-            bgColor="bg-purple-100"
-            iconColor="#7e22ce"
+            icon="flask-outline"
           />
-        </View>
-      </View>
+        </StyledView>
 
-      {/* Main Content */}
-      <View className="p-4">
-        {/* Soil Image Section */}
-        <View className="bg-white p-4 rounded-lg mb-4">
-          <Text className="text-black font-bold mb-3">
-            {t('soilAnalysis')}
-          </Text>
-          <View className="h-48 bg-gray-100 rounded-lg overflow-hidden">
+        {/* NPK Values */}
+        <StyledView className="mb-6">
+          <StyledText className="text-white text-xl font-bold mb-4">
+            {t('npkValues')}
+          </StyledText>
+          <ConditionCard
+            label={t('nitrogen')}
+            value={`${npkValues.n}%`}
+            icon="analytics-outline"
+          />
+          <ConditionCard
+            label={t('phosphorus')}
+            value={`${npkValues.p}%`}
+            icon="analytics-outline"
+          />
+          <ConditionCard
+            label={t('potassium')}
+            value={`${npkValues.k}%`}
+            icon="analytics-outline"
+          />
+        </StyledView>
+
+        {/* Soil Image */}
+        <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg mb-6">
+          <StyledText className="text-white font-bold text-lg mb-3">
+            {t('soilImage')}
+          </StyledText>
+          <StyledView className="h-48 rounded-lg overflow-hidden">
             <Image
               source={{
                 uri: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae',
               }}
-              // eslint-disable-next-line react-native/no-inline-styles
               style={{ width: '100%', height: '100%' }}
               resizeMode="cover"
             />
-          </View>
-        </View>
+          </StyledView>
+        </StyledView>
 
-        {/* Recommendations Section */}
-        <Text className="text-black font-bold text-lg mb-3">
+        {/* Recommendations */}
+        <StyledText className="text-white text-xl font-bold mb-4">
           {t('recommendedCrops')}
-        </Text>
-
-        {cropData.map((row, index) => (
-          <CropRow key={index} data={row} />
+        </StyledText>
+        {cropData.map((section, index) => (
+          <RecommendationSection key={index} {...section} />
         ))}
-      </View>
-    </ScrollView>
+      </StyledView>
+
+      {/* Info Section */}
+
+    </StyledScrollView>
   );
 };
 

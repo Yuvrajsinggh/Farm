@@ -185,7 +185,7 @@ const EditFarm = ({ navigation, route }) => {
           <View className="mt-6 bg-blue-50 p-4 rounded-xl">
             <View className="flex-row items-center mb-2">
               <Icon name="information-circle-outline" size={24} color="#447055" />
-              <Text className="text-[#447055] font-bold text-lg ml-2">Quick Tips 💡</Text>
+              <Text className="text-[#447055] font-bold text-lg ml-2">Quick Tips </Text>
             </View>
             <Text className="text-gray-600">
               • Add detailed location for better tracking{'\n'}

@@ -23,6 +23,8 @@ const RegisterScreen = ({ navigation }) => {
     const onSubmit = (data) => {
         console.log('Form submitted:', data);
         // Handle registration logic here
+        navigation.navigate('Login');
+        // ToastAndroid.show(t('accountCreatedSuccessfully'), ToastAndroid.SHORT);
     };
 
     return (
