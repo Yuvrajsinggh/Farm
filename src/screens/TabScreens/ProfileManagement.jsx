@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
 import { styled } from 'nativewind';
 import { useForm, Controller } from 'react-hook-form';
@@ -7,6 +7,9 @@ import { Picker } from '@react-native-picker/picker';
 import { AuthContext } from '../../context/Authcontext';
 import { LanguageContext } from '../../context/LanguageContext';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import i18n from '../../i18';
 const StyledView = styled(View);
@@ -22,6 +25,7 @@ export default function ProfileManagement() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { setIsLanguageSelected } = useContext(LanguageContext)
     const { t } = useTranslation();
+    const [userData, setUserData] = useState({ displayName: '', phoneNumber: '', email: '' });
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -36,14 +40,50 @@ export default function ProfileManagement() {
         setIsLanguageSelected(true); // Mark language as selected
         ToastAndroid.show(t('languageChanged'), ToastAndroid.SHORT);
     };
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const storedUsers = await AsyncStorage.getItem('users');
+                const users = storedUsers ? JSON.parse(storedUsers) : [];
+                // Assuming the first user is the logged-in user for simplicity
+                const user = users[0];
+                if (user) {
+                    setUserData({
+                        displayName: user.name,
+                        phoneNumber: user.phone,
+                        email: user.email,
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
+
         try {
-            console.log('Profile updated:', data);
+            // Retrieve existing user data from AsyncStorage
+            const storedUserData = await AsyncStorage.getItem('userData');
+            const parsedUserData = storedUserData ? JSON.parse(storedUserData) : {};
+
+            // Merge new data with the existing data
+            const updatedUserData = { ...parsedUserData, ...data };
+
+            // Save the updated user data back to AsyncStorage
+            await AsyncStorage.setItem('userData', JSON.stringify(updatedUserData));
+
+            console.log('Profile updated:', updatedUserData);
             ToastAndroid.show(t('profileUpdated'), ToastAndroid.SHORT);
+
+            // Optionally, update local state or context to reflect the changes
+            setUserData(updatedUserData); // Assuming `setUserData` is available in your context or component
         } catch (error) {
             console.error(t('errorUpdatingProfile'), error);
+            ToastAndroid.show(t('errorUpdatingProfile'), ToastAndroid.SHORT);
         } finally {
             setIsSubmitting(false);
         }
@@ -83,7 +123,7 @@ export default function ProfileManagement() {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                placeholder={t('displayName')}
+                                placeholder={userData.displayName}
                                 placeholderTextColor="#ffffff80"
                             />
                             {errors.displayName && (
@@ -116,7 +156,7 @@ export default function ProfileManagement() {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                placeholder={t('phoneNumber')}
+                                placeholder={userData.phoneNumber}
                                 placeholderTextColor="#ffffff80"
                                 keyboardType="phone-pad"
                             />
@@ -149,7 +189,7 @@ export default function ProfileManagement() {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                placeholder={t('emailOptional')}
+                                placeholder={userData.email ? userData.email : t('emailOptional')}
                                 placeholderTextColor="#ffffff80"
                                 keyboardType="email-address"
                             />

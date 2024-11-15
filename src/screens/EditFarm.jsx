@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFarms } from '../context/FarmContext';
+import { useTranslation } from 'react-i18next';
 
 const EditFarm = ({ navigation, route }) => {
+  const { t } = useTranslation();
   const { farmId } = route.params || {};
   const { farms, addFarm, updateFarm, deleteFarm } = useFarms();
 
@@ -67,7 +69,7 @@ const EditFarm = ({ navigation, route }) => {
             <Icon name="arrow-back-outline" size={24} color="white" />
           </TouchableOpacity>
           <Text className="text-white text-xl font-bold">
-            {farmId ? '🌾 Edit Farm' : '🌱 New Farm'}
+            {farmId ? t('editFarm') : t('newFarm')}
           </Text>
           <TouchableOpacity
             onPress={handleNewFarm}
@@ -90,7 +92,7 @@ const EditFarm = ({ navigation, route }) => {
         <View className="space-y-4">
           {/* Farm Name Input */}
           <View>
-            <Text className="text-gray-600 mb-2 font-medium ml-1">Farm Name </Text>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">{t('farmName')}</Text>
             <View className="relative">
               <View className="absolute left-3 top-3 z-10">
                 <Icon name="business-outline" size={24} color="#447055" />
@@ -99,7 +101,7 @@ const EditFarm = ({ navigation, route }) => {
                 className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
                 value={farmName}
                 onChangeText={setFarmName}
-                placeholder="Enter farm name"
+                placeholder={t('enterFarmName')}
                 placeholderTextColor="#9CA3AF"
               />
             </View>
@@ -107,7 +109,7 @@ const EditFarm = ({ navigation, route }) => {
 
           {/* Location Input */}
           <View>
-            <Text className="text-gray-600 mb-2 font-medium ml-1">Location </Text>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">{t('location')}</Text>
             <View className="relative">
               <View className="absolute left-3 top-3 z-10">
                 <Icon name="location-outline" size={24} color="#447055" />
@@ -116,7 +118,7 @@ const EditFarm = ({ navigation, route }) => {
                 className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
                 value={location}
                 onChangeText={setLocation}
-                placeholder="Enter location"
+                placeholder={t('enterLocation')}
                 placeholderTextColor="#9CA3AF"
               />
             </View>
@@ -124,7 +126,7 @@ const EditFarm = ({ navigation, route }) => {
 
           {/* Crop Input */}
           <View>
-            <Text className="text-gray-600 mb-2 font-medium ml-1">Crop Type </Text>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">{t('cropType')}</Text>
             <View className="relative">
               <View className="absolute left-3 top-3 z-10">
                 <Icon name="leaf-outline" size={24} color="#447055" />
@@ -133,7 +135,7 @@ const EditFarm = ({ navigation, route }) => {
                 className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
                 value={crop}
                 onChangeText={setCrop}
-                placeholder="Enter crop type"
+                placeholder={t('enterCropType')}
                 placeholderTextColor="#9CA3AF"
               />
             </View>
@@ -141,7 +143,7 @@ const EditFarm = ({ navigation, route }) => {
 
           {/* Soil Type Input */}
           <View>
-            <Text className="text-gray-600 mb-2 font-medium ml-1">Soil Type </Text>
+            <Text className="text-gray-600 mb-2 font-medium ml-1">{t('soilType')}</Text>
             <View className="relative">
               <View className="absolute left-3 top-3 z-10">
                 <Icon name="earth-outline" size={24} color="#447055" />
@@ -150,7 +152,7 @@ const EditFarm = ({ navigation, route }) => {
                 className="bg-gray-50 border border-gray-200 rounded-xl p-3 pl-12 text-gray-800"
                 value={soil}
                 onChangeText={setSoil}
-                placeholder="Enter soil type"
+                placeholder={t('enterSoilType')}
                 placeholderTextColor="#9CA3AF"
               />
             </View>
@@ -164,7 +166,7 @@ const EditFarm = ({ navigation, route }) => {
             >
               <Icon name="save-outline" size={24} color="white" />
               <Text className="text-white font-bold text-lg ml-2">
-                {farmId ? 'Save Changes ' : 'Add Farm '}
+                {farmId ? t('saveChanges') : t('addFarm')}
               </Text>
             </TouchableOpacity>
 
@@ -175,7 +177,7 @@ const EditFarm = ({ navigation, route }) => {
               >
                 <Icon name="trash-outline" size={24} color="white" />
                 <Text className="text-white font-bold text-lg ml-2">
-                  Delete Farm
+                  {t('deleteFarm')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -185,12 +187,12 @@ const EditFarm = ({ navigation, route }) => {
           <View className="mt-6 bg-blue-50 p-4 rounded-xl">
             <View className="flex-row items-center mb-2">
               <Icon name="information-circle-outline" size={24} color="#447055" />
-              <Text className="text-[#447055] font-bold text-lg ml-2">Quick Tips </Text>
+              <Text className="text-[#447055] font-bold text-lg ml-2">{t('quickTips')}</Text>
             </View>
             <Text className="text-gray-600">
-              • Add detailed location for better tracking{'\n'}
-              • Specify crop type for customized recommendations{'\n'}
-              • Include soil type for optimal irrigation settings
+              • {t('addDetailedLocation')}{'\n'}
+              • {t('specifyCropType')}{'\n'}
+              • {t('includeSoilType')}
             </Text>
           </View>
         </View>

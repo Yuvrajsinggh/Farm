@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import { styled } from 'nativewind';
 import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/Authcontext';
 import { useForm, Controller } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { users } from '../UserDatabase';
+
+
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -18,9 +22,27 @@ const Login = ({ navigation }) => {
 
     const { control, handleSubmit, formState: { errors } } = useForm();
 
-    const handleLogin = (data) => {
-        console.log('Login attempted with:', data.email, data.password);
-        login(data.email, data.password);
+    const handleLogin = async (data) => {
+        try {
+            const storedUsers = await AsyncStorage.getItem('users');
+            const users = storedUsers ? JSON.parse(storedUsers) : [];
+
+            const user = users.find(
+                (user) => user.phone === data.phone && user.password === data.password
+            );
+
+            if (user) {
+                console.log('Login successful for:', user);
+                // Call the `login` method or navigate to the next screen
+                login(user.phone, user.password);
+            } else {
+                console.error('Invalid credentials');
+                alert('Invalid phone number or password');
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred. Please try again later.');
+        }
     };
 
     return (

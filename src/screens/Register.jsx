@@ -4,6 +4,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { styled } from 'nativewind';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { users } from '../UserDatabase';
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -17,14 +19,24 @@ const RegisterScreen = ({ navigation }) => {
             name: '',
             phone: '',
             email: '',
+            password: '',
         },
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log('Form submitted:', data);
         // Handle registration logic here
-        navigation.navigate('Login');
-        // ToastAndroid.show(t('accountCreatedSuccessfully'), ToastAndroid.SHORT);
+        users.push(data);
+        try {
+            // Save users array to AsyncStorage
+            await AsyncStorage.setItem('users', JSON.stringify(users));
+            console.log('User registered:', data);
+
+            // Navigate to Login screen
+            navigation.navigate('Login');
+        } catch (error) {
+            console.error("Error saving user data:", error);
+        }
     };
 
     return (
@@ -132,12 +144,38 @@ const RegisterScreen = ({ navigation }) => {
                     )}
                 />
 
+                <Controller
+                    control={control}
+                    name="password"
+                    rules={{ required: t('required') }}
+                    render={({ field: { onChange, value } }) => (
+                        <StyledView className="relative mt-4">
+                            <StyledView className="absolute left-3 top-4 z-10">
+                                <Icon name="lock-closed-outline" size={24} color="#ffffff" />
+                            </StyledView>
+                            <StyledTextInput
+                                className="bg-white/20 rounded-xl p-4 pl-12 text-white text-lg"
+                                placeholder={t('password')}
+                                placeholderTextColor="#ffffff80"
+                                secureTextEntry
+                                value={value}
+                                onChangeText={onChange}
+                            />
+                            {errors.password && (
+                                <StyledText className="text-red-400 text-sm ml-1 mt-1">
+                                    {errors.password.message}
+                                </StyledText>
+                            )}
+                        </StyledView>
+                    )}
+                />
+
                 {/* Create Account Button */}
                 <StyledTouchableOpacity
                     className="bg-white mt-6 p-4 rounded-xl flex-row justify-center items-center"
                     onPress={handleSubmit(onSubmit)}
                 >
-                    <Icon name="fitness-outline" size={24} color="#447055" />
+
                     <StyledText className="text-[#447055] font-bold text-lg ml-2">
                         {t('createAccount')}
                     </StyledText>

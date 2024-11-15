@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { styled } from 'nativewind';
@@ -101,6 +101,7 @@ const FertilizerRecommendation = () => {
   };
 
   return (
+
     <StyledScrollView className="flex-1 bg-[#447055]">
       {/* Header Section */}
       <StyledView className="p-6">
@@ -130,8 +131,8 @@ const FertilizerRecommendation = () => {
                     style={{ color: '#ffffff' }}
                   >
                     <Picker.Item label={t('selectCropType')} value="" />
-                    <Picker.Item label="Wheat" value="wheat" />
-                    <Picker.Item label="Soybean" value="soybean" />
+                    <Picker.Item label={t('wheat')} value="wheat" />
+                    <Picker.Item label={t('soybean')} value="soybean" />
                   </Picker>
                 </StyledView>
                 {errors.cropType && (
@@ -157,9 +158,9 @@ const FertilizerRecommendation = () => {
                     style={{ color: '#ffffff' }}
                   >
                     <Picker.Item label={t('selectSoilType')} value="" />
-                    <Picker.Item label="Black" value="black" />
-                    <Picker.Item label="Red" value="red" />
-                    <Picker.Item label="Clay" value="clay" />
+                    <Picker.Item label={t('black')} value="black" />
+                    <Picker.Item label={t('red')} value="red" />
+                    <Picker.Item label={t('clay')} value="clay" />
                   </Picker>
                 </StyledView>
                 {errors.soilType && (
@@ -178,16 +179,22 @@ const FertilizerRecommendation = () => {
             render={({ field: { onChange, value } }) => (
               <StyledView className="mb-4">
                 <StyledText className="text-white mb-2">{t('area')}</StyledText>
-                <StyledView className="bg-white/20 rounded-xl">
+                <StyledView className="flex-row items-center bg-white/20 rounded-xl p-2">
+                  <TextInput
+                    style={{ flex: 1, color: '#ffffff', padding: 8 }}
+                    placeholder={t('selectArea')}
+                    placeholderTextColor="#ffffff"
+                    keyboardType="numeric"
+                    value={value.size}
+                    onChangeText={(text) => onChange({ ...value, size: text })}
+                  />
                   <Picker
-                    selectedValue={value}
-                    onValueChange={onChange}
-                    style={{ color: '#ffffff' }}
+                    selectedValue={value.unit}
+                    onValueChange={(unit) => onChange({ ...value, unit })}
+                    style={{ color: '#ffffff', flex: 1 }}
                   >
-                    <Picker.Item label={t('selectArea')} value="" />
-                    <Picker.Item label="1 hectare" value="1" />
-                    <Picker.Item label="2 hectares" value="2" />
-                    <Picker.Item label="5 hectares" value="5" />
+                    <Picker.Item label={t('hectare')} value="hectare" />
+                    <Picker.Item label={t('bigha')} value="bigha" />
                   </Picker>
                 </StyledView>
                 {errors.area && (
@@ -198,6 +205,7 @@ const FertilizerRecommendation = () => {
               </StyledView>
             )}
           />
+
 
           <StyledTouchableOpacity
             className="bg-white mt-4 p-4 rounded-xl flex-row justify-center items-center"
