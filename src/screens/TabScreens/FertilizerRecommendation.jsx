@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { styled } from 'nativewind';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-
+import { FertilizerCombination } from './FertilizerAlgorithm';
 const StyledView = styled(View);
 const StyledText = styled(Text);
 const StyledScrollView = styled(ScrollView);
@@ -87,16 +87,54 @@ const FertilizerRecommendation = () => {
       ]
     }
   };
+  const fertilizers = {
+    Urea: [46, 0, 0],
+    DAP: [18, 46, 0],
+    MOP: [0, 0, 60],
+  };
 
+
+  const cropRequirements = [
+    { crop_name: "Wheat", nitrogen_needed: 120, phosphorus_needed: 50, potassium_needed: 60 },
+    { crop_name: "Rice", nitrogen_needed: 100, phosphorus_needed: 40, potassium_needed: 30 },
+  ];
+
+  const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+  const fertilizerCombination = new FertilizerCombination(fertilizers, cropRequirements);
   const onSubmit = (data) => {
-    const cropTypeKey = data.cropType.toLowerCase();
-    if (mpFertilizerData[cropTypeKey]) {
-      setSelectedFertilizerData(mpFertilizerData[cropTypeKey]);
-      setShowResults(true);
+    const { cropType, area, soilType } = data;
+
+    // Prepare input for the algorithm
+
+    const input = {
+      cropName: cropType, // `cropType` from the form
+      farmArea: parseFloat(area.size), // Area in numeric value
+      // n: parseFloat(soilType.n), // Soil nitrogen
+      // p: parseFloat(soilType.p), // Soil phosphorus
+      // k: parseFloat(soilType.k), // Soil potassium
+      n: getRandomValue(30, 40), // Random value between 30 and 40
+      p: getRandomValue(10, 20), // Random value between 10 and 20
+      k: getRandomValue(10, 20), // Random value between 10 and 20
+    };
+
+
+
+    // Get recommendations
+    const results = fertilizerCombination.getCombination(input);
+    console.log('results', results);
+
+    // Display results
+    if (results) {
+      alert('DAP ' + results[0].DAP + "\nUrea  " + results[0].Urea + "\nMOP " + results[0].MOP);
+      // alert(results)
+      console.log(results);
+
+    } else if (results.length === 0) {
+      alert("No valid fertilizer combinations found.");
     } else {
-      setSelectedFertilizerData(null);
-      setShowResults(false);
-      alert(t('cropTypeNotFound'));
+      setSelectedFertilizerData(results);
+      setShowResults(true);
     }
   };
 
@@ -132,7 +170,7 @@ const FertilizerRecommendation = () => {
                   >
                     <Picker.Item label={t('selectCropType')} value="" />
                     <Picker.Item label={t('wheat')} value="wheat" />
-                    <Picker.Item label={t('soybean')} value="soybean" />
+                    <Picker.Item label={t('rice')} value="rice" />
                   </Picker>
                 </StyledView>
                 {errors.cropType && (
@@ -224,16 +262,6 @@ const FertilizerRecommendation = () => {
             <StyledText className="text-white text-xl font-bold mb-4">
               {selectedFertilizerData.title}
             </StyledText>
-
-            {selectedFertilizerData.fertilizers.map((fertilizer, index) => (
-              <FertilizerCard
-                key={index}
-                name={fertilizer.name}
-                amount={fertilizer.amount}
-                icon={fertilizer.icon}
-                description={fertilizer.description}
-              />
-            ))}
 
             {/* Additional Tips */}
             <StyledView className="bg-white/10 p-4 rounded-xl mt-6">
