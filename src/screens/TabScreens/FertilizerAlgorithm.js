@@ -4,6 +4,7 @@ export class FertilizerCombination {
             Urea: [46, 0, 0],
             DAP: [18, 46, 0],
             MOP: [0, 0, 60],
+
         };
 
         this.cropRequirements = [
@@ -18,7 +19,7 @@ export class FertilizerCombination {
         const cropRequirement = this.cropRequirements.find(crop => crop.crop_name === cropName);
         if (!cropRequirement) return { message: "Invalid crop name provided." };
 
-        // Calculate net requirements
+        // Calculate net requirements per hectare
         const netN = Math.max(cropRequirement.nitrogen_needed - soilN, 0);
         const netP = Math.max(cropRequirement.phosphorus_needed - soilP, 0);
         const netK = Math.max(cropRequirement.potassium_needed - soilK, 0);
@@ -124,25 +125,14 @@ export class FertilizerCombination {
 }
 
 // Example usage
-// const fertilizers = {
-//     Urea: [46, 0, 0],
-//     DAP: [18, 46, 0],
-//     MOP: [0, 0, 60]
-// };
+const farm = new FertilizerCombination();
 
-// const cropRequirements = [
-//     { crop_name: "Wheat", nitrogen_needed: 120, phosphorus_needed: 50, potassium_needed: 60 },
-//     { crop_name: "Rice", nitrogen_needed: 100, phosphorus_needed: 40, potassium_needed: 30 }
-// ];
+const input = {
+    cropName: "wheat", // Crop for which fertilizer is needed
+    farmArea: 1,       // Farm area in hectares
+    n: 40,             // Soil nitrogen content in kg/ha
+    p: 10,             // Soil phosphorus content in kg/ha
+    k: 20,             // Soil potassium content in kg/ha
+};
 
-// const farm = new FertilizerCombination(fertilizers, cropRequirements);
-
-// const input = {
-//     cropName: "Wheat",
-//     farmArea: 1,
-//     n: 40,
-//     p: 10,
-//     k: 20
-// };
-
-// console.log('example', farm.getCombination(input));
+console.log(farm.getCombination(input));

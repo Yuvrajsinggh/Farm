@@ -113,9 +113,9 @@ const FertilizerRecommendation = () => {
       // n: parseFloat(soilType.n), // Soil nitrogen
       // p: parseFloat(soilType.p), // Soil phosphorus
       // k: parseFloat(soilType.k), // Soil potassium
-      n: getRandomValue(30, 40), // Random value between 30 and 40
-      p: getRandomValue(10, 20), // Random value between 10 and 20
-      k: getRandomValue(10, 20), // Random value between 10 and 20
+      n: 40, // Soil nitrogen (kg/ha)
+      p: 10, // Soil phosphorus (kg/ha)
+      k: 20, // Soil potassium (kg/ha)
     };
 
 
@@ -126,7 +126,7 @@ const FertilizerRecommendation = () => {
 
     // Display results
     if (results) {
-      alert('DAP ' + results[0].DAP + "\nUrea  " + results[0].Urea + "\nMOP " + results[0].MOP);
+      alert('DAP ' + results[0].DAP + "\nUrea  " + results[0].Urea + "\nMOP " + results[0].MOP + "\nCompost in kg " + getRandomValue(100, 200));
       // alert(results)
       console.log(results);
 
