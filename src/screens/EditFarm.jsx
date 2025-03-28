@@ -13,7 +13,7 @@ const EditFarm = ({ navigation, route }) => {
   console.log("ROUTE PARAMS::", route.params);
 
   const { farms, addFarm, updateFarm, deleteFarm } = useFarms();
-
+  // ROUTE PARAMS:: {"cropType": "wdw", "farmId": 5, "farmName": "test2", "location": "dwdwd", "soilType": "dwdwgvvg"}
   // State for form fields, using API-consistent property names
   const [farm_name, setFarmName] = useState('');
   const [location, setLocation] = useState('');
@@ -36,10 +36,10 @@ const EditFarm = ({ navigation, route }) => {
       const farm = farms.find((f) => f.id === Number(farmId)); // Ensure type match
       if (farm) {
         console.log('Farm data:', farm); // Debug farm object
-        setFarmName(farm.farm_name || '');
-        setLocation(farm.location || '');
-        setCropType(farm.crop_type || '');
-        setSoilType(farm.soil_type || '');
+        setFarmName(route.params.farmName || '');
+        setLocation(route.params.location || '');
+        setCropType(route.params.cropType || '');
+        setSoilType(route.params.soilType || '');
       } else {
         console.log('Farm not found with ID:', farmId);
       }
