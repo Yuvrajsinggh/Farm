@@ -16,7 +16,7 @@ export const FarmProvider = ({ children }) => {
   const addFarm = (farm) => {
     const newFarm = {
       ...farm,
-      id: Date.now().toString(), // Simple way to generate unique IDs
+      id: Date.now().toString(),
     };
     setFarms(prevFarms => [...prevFarms, newFarm]);
   };
@@ -30,14 +30,26 @@ export const FarmProvider = ({ children }) => {
   };
 
   const deleteFarm = (farmId) => {
-    setFarms(farms.filter(farm => farm.id !== farmId));
+    setFarms(prevFarms => prevFarms.filter(farm => farm.id !== farmId));
   };
 
   return (
-    <FarmContext.Provider value={{ farms, addFarm, updateFarm, deleteFarm }}>
+    <FarmContext.Provider value={{
+      farms,
+      setFarms, // Add setFarms to the context value
+      addFarm,
+      updateFarm,
+      deleteFarm
+    }}>
       {children}
     </FarmContext.Provider>
   );
 };
 
-export const useFarms = () => useContext(FarmContext);
+export const useFarms = () => {
+  const context = useContext(FarmContext);
+  if (!context) {
+    throw new Error('useFarms must be used within a FarmProvider');
+  }
+  return context;
+};

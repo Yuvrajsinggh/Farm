@@ -1,41 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { styled } from 'nativewind';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { FertilizerCombination } from './FertilizerAlgorithm';
+
 const StyledView = styled(View);
 const StyledText = styled(Text);
 const StyledScrollView = styled(ScrollView);
 const StyledTouchableOpacity = styled(TouchableOpacity);
 
-const FertilizerCard = ({ name, amount, icon, description }) => (
-  <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg mb-3">
-    <StyledView className="flex-row items-center mb-2">
-      <StyledView className="bg-white/20 p-2 rounded-full mr-3">
-        <Icon name={icon} size={24} color="#ffffff" />
-      </StyledView>
-      <StyledView className="flex-1">
-        <StyledText className="text-white font-bold text-lg">{name}</StyledText>
-        <StyledText className="text-white/70">{amount}</StyledText>
-      </StyledView>
-    </StyledView>
-    <StyledText className="text-white/70 text-sm mt-2">{description}</StyledText>
-  </StyledView>
-);
-
 const FertilizerRecommendation = () => {
   const { t } = useTranslation();
   const [showResults, setShowResults] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [recommendationData, setRecommendationData] = useState(null);
   const [selectedFertilizerData, setSelectedFertilizerData] = useState(null);
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       cropType: '',
       soilType: '',
-      area: '',
+      area: { size: '', unit: 'hectare' },
     }
   });
 
@@ -87,12 +75,12 @@ const FertilizerRecommendation = () => {
       ]
     }
   };
+
   const fertilizers = {
     Urea: [46, 0, 0],
     DAP: [18, 46, 0],
     MOP: [0, 0, 60],
   };
-
 
   const cropRequirements = [
     { crop_name: "Wheat", nitrogen_needed: 120, phosphorus_needed: 50, potassium_needed: 60 },
@@ -102,46 +90,49 @@ const FertilizerRecommendation = () => {
   const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
   const fertilizerCombination = new FertilizerCombination(fertilizers, cropRequirements);
+
   const onSubmit = (data) => {
     const { cropType, area, soilType } = data;
 
-    // Prepare input for the algorithm
-
     const input = {
-      cropName: cropType, // `cropType` from the form
-      farmArea: parseFloat(area.size), // Area in numeric value
-      // n: parseFloat(soilType.n), // Soil nitrogen
-      // p: parseFloat(soilType.p), // Soil phosphorus
-      // k: parseFloat(soilType.k), // Soil potassium
-      n: 40, // Soil nitrogen (kg/ha)
-      p: 10, // Soil phosphorus (kg/ha)
-      k: 20, // Soil potassium (kg/ha)
+      cropName: cropType,
+      farmArea: parseFloat(area.size),
+      n: 40,
+      p: 10,
+      k: 20,
     };
 
-
-
-    // Get recommendations
     const results = fertilizerCombination.getCombination(input);
     console.log('results', results);
 
-    // Display results
-    if (results) {
-      alert('DAP ' + results[0].DAP + "\nUrea  " + results[0].Urea + "\nMOP " + results[0].MOP + "\nCompost in kg " + getRandomValue(100, 200));
-      // alert(results)
-      console.log(results);
-
-    } else if (results.length === 0) {
-      alert("No valid fertilizer combinations found.");
+    if (results && results.length > 0) {
+      setRecommendationData({
+        DAP: results[0].DAP,
+        Urea: results[0].Urea,
+        MOP: results[0].MOP,
+        Compost: getRandomValue(100, 200)
+      });
+      setModalVisible(true);
     } else {
-      setSelectedFertilizerData(results);
-      setShowResults(true);
+      setRecommendationData({ error: t('noCombinationsFound') });
+      setModalVisible(true);
     }
   };
 
-  return (
+  const handleModalClose = () => {
+    setModalVisible(false);
+    reset({
+      cropType: '',
+      soilType: '',
+      area: { size: '', unit: 'hectare' },
+    });
+    setRecommendationData(null);
+    setShowResults(false);
+    setSelectedFertilizerData(null);
+  };
 
+  return (
     <StyledScrollView className="flex-1 bg-[#447055]">
-      {/* Header Section */}
       <StyledView className="p-6">
         <StyledView className="items-center mb-8">
           <Icon name="flask-outline" size={80} color="#ffffff" />
@@ -153,7 +144,6 @@ const FertilizerRecommendation = () => {
           </StyledText>
         </StyledView>
 
-        {/* Input Form */}
         <StyledView className="bg-white/10 p-4 rounded-xl backdrop-blur-lg mb-6">
           <Controller
             control={control}
@@ -244,7 +234,6 @@ const FertilizerRecommendation = () => {
             )}
           />
 
-
           <StyledTouchableOpacity
             className="bg-white mt-4 p-4 rounded-xl flex-row justify-center items-center"
             onPress={handleSubmit(onSubmit)}
@@ -256,14 +245,52 @@ const FertilizerRecommendation = () => {
           </StyledTouchableOpacity>
         </StyledView>
 
-        {/* Results Section */}
+        {/* Modal for Results */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleModalClose}
+        >
+          <StyledView className="flex-1 justify-center items-center bg-black/50">
+            <StyledView className="bg-white rounded-xl p-6 w-4/5 max-w-sm">
+              <StyledText className="text-xl font-bold text-[#447055] mb-4">
+                Recommendation
+              </StyledText>
+
+              {recommendationData && !recommendationData.error ? (
+                <StyledView>
+                  <StyledText className="text-gray-700 mb-2">DAP: {recommendationData.DAP} kg</StyledText>
+                  <StyledText className="text-gray-700 mb-2">Urea: {recommendationData.Urea} kg</StyledText>
+                  <StyledText className="text-gray-700 mb-2">MOP: {recommendationData.MOP} kg</StyledText>
+                  <StyledText className="text-gray-700 mb-4">
+                    Compost: {recommendationData.Compost} kg
+                  </StyledText>
+                </StyledView>
+              ) : (
+                <StyledText className="text-red-500 mb-4">
+                  {recommendationData?.error}
+                </StyledText>
+              )}
+
+              <StyledTouchableOpacity
+                className="bg-[#447055] p-3 rounded-lg items-center"
+                onPress={handleModalClose}
+              >
+                <StyledText className="text-white font-semibold">
+                  {t('close')}
+                </StyledText>
+              </StyledTouchableOpacity>
+            </StyledView>
+          </StyledView>
+        </Modal>
+
         {showResults && selectedFertilizerData && (
           <StyledView>
             <StyledText className="text-white text-xl font-bold mb-4">
               {selectedFertilizerData.title}
             </StyledText>
 
-            {/* Additional Tips */}
             <StyledView className="bg-white/10 p-4 rounded-xl mt-6">
               <StyledView className="flex-row items-center mb-2">
                 <Icon name="information-circle-outline" size={24} color="#ffffff" />

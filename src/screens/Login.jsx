@@ -6,9 +6,7 @@ import { AuthContext } from '../context/Authcontext';
 import { useForm, Controller } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { users } from '../UserDatabase';
-
-
+import { userLoginService } from '../../utilities/AuthServices';
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -19,37 +17,60 @@ const Login = ({ navigation }) => {
     const { t } = useTranslation();
     const { login } = React.useContext(AuthContext);
     const [showPassword, setShowPassword] = React.useState(false);
-
     const { control, handleSubmit, formState: { errors } } = useForm();
 
     const handleLogin = async (data) => {
         try {
-            const storedUsers = await AsyncStorage.getItem('users');
-            const users = storedUsers ? JSON.parse(storedUsers) : [];
+            // Prepare the payload in the required format
+            const loginPayload = {
+                phone_number: `+${data.phone}`, // Adding '+' prefix as per the required format
+                password: data.password
+            };
 
-            const user = users.find(
-                (user) => user.phone === data.phone && user.password === data.password
-            );
+            // Call the login service
+            const response = await userLoginService(loginPayload);
 
-            if (user) {
-                console.log('Login successful for:', user);
-                // Call the `login` method or navigate to the next screen
-                login(user.phone, user.password);
-            } else {
-                console.error('Invalid credentials');
-                alert('Invalid phone number or password');
-            }
+            // Store user ID in AsyncStorage
+            await AsyncStorage.setItem('userId', response.id.toString());
+            console.log("response", response.id);
+
+            // Optionally store the entire user object
+            await AsyncStorage.setItem('userData', JSON.stringify({
+                id: response.id,
+                phone_number: response.phone_number,
+                full_name: response.full_name,
+                email: response.email,
+                is_active: response.is_active,
+                is_admin: response.is_admin
+            }));
+
+            // Call the login method from AuthContext with necessary data
+            login(response.phone_number, data.password);
+
+
+            // show android toast 
+            ToastAndroid.show('Login successful! Welcome ', ToastAndroid.SHORT);
+
+
+
         } catch (error) {
-            console.error('Error during login:', error);
-            alert('An error occurred. Please try again later.');
+            console.error('Login error:', error);
+
+            // Handle specific error cases
+            let errorMessage = 'An error occurred. Please try again.';
+            if (error.response?.status === 401) {
+                errorMessage = 'Invalid phone number or password';
+            } else if (error.response?.status === 400) {
+                errorMessage = 'Invalid request format';
+            }
+
+            alert("Login failed ");
         }
     };
 
     return (
-        <StyledView className="flex-1  bg-[#447055] p-6">
-            {/* Logo Section */}
+        <StyledView className="flex-1 bg-[#447055] p-6">
             <StyledView className="items-center mb-12 mt-10">
-                {/* <Icon name="fitness-outline" size={80} color="#ffffff" /> */}
                 <StyledText className="text-4xl font-bold text-white text-center mt-4">
                     {t('welcome')}
                 </StyledText>
@@ -58,7 +79,6 @@ const Login = ({ navigation }) => {
                 </StyledText>
             </StyledView>
 
-            {/* Login Form */}
             <StyledView className="w-full space-y-4 bg-white/10 p-6 rounded-xl backdrop-blur-lg">
                 <Controller
                     control={control}
@@ -135,7 +155,6 @@ const Login = ({ navigation }) => {
                     )}
                 />
 
-                {/* Login Button */}
                 <StyledTouchableOpacity
                     className="bg-white mt-6 p-4 rounded-xl"
                     onPress={handleSubmit(handleLogin)}
@@ -145,7 +164,6 @@ const Login = ({ navigation }) => {
                     </StyledText>
                 </StyledTouchableOpacity>
 
-                {/* Additional Options */}
                 <StyledView className="flex-col gap-4 justify-between mt-6">
                     <StyledTouchableOpacity
                         className="flex-row items-center"
@@ -167,11 +185,7 @@ const Login = ({ navigation }) => {
                     </StyledTouchableOpacity>
                 </StyledView>
             </StyledView>
-
-            {/* Social Login Options */}
-
-
-        </StyledView >
+        </StyledView>
     );
 };
 
